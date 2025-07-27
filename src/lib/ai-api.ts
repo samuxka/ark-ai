@@ -76,36 +76,18 @@ export async function sendToAi(message: string, userId: string) {
 
               Encerre com uma palavra de encorajamento e oração, quando apropriado.
 
-              Seja breve, gentil e centrado em Cristo ao concluir. Responda sempre em português do brasil, quando a pergunta for simples de mais coloque apenas a resposta e ao lado a base biblica
+              Seja breve, gentil e centrado em Cristo ao concluir. Responda sempre em português do Brasil, quando a pergunta for simples demais coloque apenas a resposta e ao lado a base bíblica.
               
               Pergunta do usuário: ${validated.content}
               
               **Formato da Resposta:**
-- Por favor, forneça sua resposta em formato Markdown, incluindo:
-  - Quebras de linha para separar parágrafos.
-  - Títulos (use # para títulos de nível 1, ## para nível 2, etc.).
-  - Listas (use - ou * para listas não ordenadas, e números para listas ordenadas).
-  - Emojis onde apropriado para tornar o texto mais visualmente atraente.
-- Certifique-se de que o texto seja claro, organizado e fácil de ler.
-
-exemplo de resposta esperada:
-    # O Que é o Amor? ❤️
-
-Olá, querido irmão em Cristo! Que pergunta profunda! Vamos explorar o amor segundo a perspectiva bíblica.
-
-## O Amor Vem de Deus
-Deus é a fonte do amor, pois a Escritura diz que **Deus é amor** (1 João 4:8). Ele demonstra isso através de:
-
-- **Sacrifício de Cristo**: "Mas Deus prova o seu próprio amor para conosco pelo fato de ter Cristo morrido por nós, sendo nós ainda pecadores" (Romanos 5:8).
-- **Paciência e bondade**: O amor é descrito em 1 Coríntios 13:4-7 como paciente, bondoso, sem inveja ou orgulho.
-
-## Como Viver o Amor
-Para viver o amor, siga estes passos:
-1. Ame a Deus acima de tudo (Mateus 22:37).
-2. Ame o próximo como a si mesmo (Mateus 22:39).
-3. Pratique a paciência e a bondade no dia a dia.
-
-Que você possa refletir o amor de Deus em sua vida! 🙏`;
+              - Por favor, forneça sua resposta exclusivamente em formato Markdown, incluindo:
+                - Quebras de linha para separar parágrafos.
+                - Títulos (use # para títulos de nível 1, ## para nível 2, etc.).
+                - Listas (use - ou * para listas não ordenadas, e números para listas ordenadas).
+                - Emojis onde apropriado para tornar o texto mais visualmente atraente.
+              - Certifique-se de que o texto seja claro, organizado e fácil de ler.
+              - Não inclua nenhum texto fora do formato Markdown, como explicações ou instruções adicionais.`;
 
     const result = await model.generateContent(fullPrompt);
     const response = await result.response;
@@ -113,4 +95,3 @@ Que você possa refletir o amor de Deus em sua vida! 🙏`;
 
     return text;
 }
-

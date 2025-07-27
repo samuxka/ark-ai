@@ -11,12 +11,13 @@ import { useChatStore } from '@/store/useChatStore';
 import { mockInput } from '@/db/mock-inputs';
 import type { MockInput } from '@/db/mock-inputs';
 import { motion } from 'framer-motion';
+import ReactMarkdown from 'react-markdown'; // Import react-markdown
+import rehypeRaw from 'rehype-raw'; // Optional: for raw HTML in Markdown
 
 function getRandomUniqueItems<T>(arr: T[], count: number): T[] {
   const shuffled = [...arr].sort(() => 0.5 - Math.random());
   return shuffled.slice(0, count);
 }
-
 
 export default function ChatPage() {
   const { id } = useParams();
@@ -26,7 +27,7 @@ export default function ChatPage() {
   const [chatTitle, setChatTitle] = useState('New Chat');
   const [showInputCard, setShowInputCard] = useState(true);
 
-  // Log pra depurar showInputCard
+  // Log para depurar showInputCard
   useEffect(() => {
     console.log('showInputCard:', showInputCard);
     console.log('Messages:', messages);
@@ -120,8 +121,9 @@ export default function ChatPage() {
             <div key={msg.id} className={`my-4 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
               <div
                 className={`inline-block p-2 rounded ${msg.role === 'user' ? 'bg-blue-600 text-white max-w-[60%]' : ''}`}
-                dangerouslySetInnerHTML={{ __html: msg.content }}
-              />
+              >
+                <ReactMarkdown rehypePlugins={[rehypeRaw]}>{msg.content}</ReactMarkdown>
+              </div>
             </div>
           ))}
         </div>
@@ -134,7 +136,6 @@ export default function ChatPage() {
         chatId={id as string}
         setInputRef={(ref) => (inputRef.current = ref)}
       />
-
-    </motion.section >
+    </motion.section>
   );
 }
