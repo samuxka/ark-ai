@@ -33,10 +33,6 @@ export default function LoginPage() {
         }
     };
 
-    const handleGoogleLogin = async () => {
-        await signIn("google", { callbackUrl: "/" });
-    };
-
     return (
         <section className="w-full h-screen flex items-center justify-center">
             <Card className="w-full max-w-sm">
@@ -59,16 +55,6 @@ export default function LoginPage() {
                         {error && <p className="text-red-500">{error}</p>}
                         <Button type="submit" className="w-full">Login</Button>
                     </form>
-                    <div className="w-full my-4 flex items-center justify-center">
-                        <div className="w-full h-[1px] bg-zinc-400"></div>
-                        <p className="text-sm text-zinc-400 mx-2">or</p>
-                        <div className="w-full h-[1px] bg-zinc-400"></div>
-                    </div>
-                    <div className="mt-4">
-                        <Button onClick={handleGoogleLogin} variant="secondary" className="w-full hover:bg-zinc-200">
-                            <Icon icon="devicon:google" /> Continue with Google
-                        </Button>
-                    </div>
                     <p className="mt-2 flex items-center justify-center gap-1 text-sm">
                         Don't have an account yet? 
                         <Link href="/signup" className="hover:text-indigo-600 hover:underline">Click here</Link>

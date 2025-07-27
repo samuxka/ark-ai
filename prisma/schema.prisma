@@ -20,8 +20,7 @@ model Account {
   scope             String?
   id_token          String? @map("idToken")
   session_state     String? @map("sessionState")
-
-  user User @relation(fields: [userId], references: [id], name: "AccountToUser", onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], name: "AccountToUser", onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -31,8 +30,7 @@ model Session {
   sessionToken String   @unique
   userId       String   @db.ObjectId
   expires      DateTime
-
-  user User @relation(fields: [userId], references: [id], name: "SessionToUser", onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], name: "SessionToUser", onDelete: Cascade)
 }
 
 model User {
@@ -44,14 +42,22 @@ model User {
   password      String
   emailVerified DateTime?
   image         String?
-  username      String?   @unique
+  username      String?
   bio           String?
-
-  accounts Account[] @relation("AccountToUser")
-  sessions Session[] @relation("SessionToUser")
-  messages Message[]
+  accounts      Account[] @relation("AccountToUser")
+  sessions      Session[] @relation("SessionToUser")
+  messages      Message[]
+  chats         Chat[]    @relation("UserToChat")
 }
-  
+
+model Chat {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  title     String    @default("New Chat")
+  createdAt DateTime  @default(now())
+  userId    String    @db.ObjectId
+  user      User      @relation(fields: [userId], references: [id], name: "UserToChat")
+  messages  Message[]
+}
 
 model Message {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -60,4 +66,6 @@ model Message {
   createdAt DateTime @default(now())
   userId    String   @db.ObjectId
   user      User     @relation(fields: [userId], references: [id])
+  chatId    String?  @db.ObjectId
+  chat      Chat?    @relation(fields: [chatId], references: [id])
 }

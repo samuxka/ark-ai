@@ -67,16 +67,6 @@ export default function SignUpPage() {
             {error && <p className="text-red-500">{error}</p>}
             <Button type="submit" className="w-full">Create account</Button>
           </form>
-          <div className="w-full my-4 flex items-center justify-center">
-            <div className="w-full h-[1px] bg-zinc-400"></div>
-            <p className="text-sm text-zinc-400 mx-2">or</p>
-            <div className="w-full h-[1px] bg-zinc-400"></div>
-          </div>
-          <div className="mt-4">
-            <Button  variant="secondary" className="w-full hover:bg-zinc-200">
-              <Icon icon="devicon:google" /> Continue with Google
-            </Button>
-          </div>
           <p className="mt-2 flex items-center justify-center gap-1">
             Have an account?
             <Link href="/login" className="hover:text-indigo-600 hover:underline">Click here</Link>
