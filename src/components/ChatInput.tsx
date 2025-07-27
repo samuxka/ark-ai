@@ -69,7 +69,6 @@ function ChatInput({ onMessageSent, chatId, setInputRef }: ChatInputProps) {
     setInput('');
   };
 
-  // ✅ Adicione essa função depois do handleSubmit
   const sendMessageFromCard = (content: string) => {
     setInput(content);
     setTimeout(() => {
@@ -78,7 +77,6 @@ function ChatInput({ onMessageSent, chatId, setInputRef }: ChatInputProps) {
     }, 100);
   };
 
-  // ✅ E aqui o useEffect com o setInputRef
   useEffect(() => {
     if (setInputRef) {
       setInputRef(sendMessageFromCard);

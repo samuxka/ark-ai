@@ -45,7 +45,7 @@ export default function Component() {
       type: "image/jpeg",
       url: session?.user?.image || "/user.jpeg",
       id: "avatar-123456789",
-      preview: session?.user?.image || "/user.jpeg", // Add preview for initial file
+      preview: session?.user?.image || "/user.jpeg",
     },
   ];
 

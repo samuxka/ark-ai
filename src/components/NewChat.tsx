@@ -35,7 +35,6 @@ function NewChat({ isClose }: NewChatProps) {
     }
 
     try {
-      // Criar novo chat no backend
       const response = await fetch('/api/chats', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -43,7 +42,7 @@ function NewChat({ isClose }: NewChatProps) {
       });
       if (!response.ok) throw new Error('Erro ao criar chat');
       const { chatId } = await response.json();
-      // Redirecionar para a página do novo chat
+
       router.push(`/chat/${chatId}`);
     } catch (error) {
       console.error('Erro ao criar novo chat:', error);

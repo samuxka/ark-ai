@@ -11,8 +11,8 @@ import { useChatStore } from '@/store/useChatStore';
 import { mockInput } from '@/db/mock-inputs';
 import type { MockInput } from '@/db/mock-inputs';
 import { motion } from 'framer-motion';
-import ReactMarkdown from 'react-markdown'; // Import react-markdown
-import rehypeRaw from 'rehype-raw'; // Optional: for raw HTML in Markdown
+import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw';
 
 function getRandomUniqueItems<T>(arr: T[], count: number): T[] {
   const shuffled = [...arr].sort(() => 0.5 - Math.random());
@@ -27,13 +27,11 @@ export default function ChatPage() {
   const [chatTitle, setChatTitle] = useState('New Chat');
   const [showInputCard, setShowInputCard] = useState(true);
 
-  // Log para depurar showInputCard
   useEffect(() => {
     console.log('showInputCard:', showInputCard);
     console.log('Messages:', messages);
   }, [showInputCard, messages]);
 
-  // Carregar chat e mensagens
   useEffect(() => {
     if (!session?.user?.id || !id) return;
 
@@ -60,7 +58,6 @@ export default function ChatPage() {
     fetchChat();
   }, [id, session?.user?.id, clearMessages, addMessage, router]);
 
-  // Função pra gerar título com IA
   const handleFirstMessage = async (content: string) => {
     if (!session?.user?.id) return;
 
@@ -92,7 +89,6 @@ export default function ChatPage() {
 
   const [randomInputs, setRandomInputs] = useState<MockInput[]>([]);
 
-  // Sorteia os inputs aleatórios quando o componente monta
   useEffect(() => {
     const inputs = getRandomUniqueItems(mockInput, 3);
     setRandomInputs(inputs);

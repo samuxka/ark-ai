@@ -8,7 +8,6 @@ export default async function Home() {
     redirect('/login');
   }
 
-  // Buscar o último chat do usuário
   const lastChat = await prisma.chat.findFirst({
     where: { userId: session.user.id },
     orderBy: { createdAt: 'desc' },
@@ -18,7 +17,6 @@ export default async function Home() {
   if (lastChat) {
     redirect(`/chat/${lastChat.id}`);
   } else {
-    // Criar um novo chat se não houver chats
     const newChat = await prisma.chat.create({
       data: {
         title: 'New Chat',

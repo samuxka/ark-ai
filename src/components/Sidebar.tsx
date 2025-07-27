@@ -21,7 +21,6 @@ function Sidebar() {
   const router = useRouter();
   const { data: session } = useSession();
 
-  // Carregar chats do MongoDB
   useEffect(() => {
     if (!session?.user?.id) return;
 

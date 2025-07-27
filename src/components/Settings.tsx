@@ -6,7 +6,6 @@ import React, { useRef } from 'react'
 import { Button } from './ui/button';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { Label } from '@radix-ui/react-label';
-import { Input } from './ui/input';
 import { ModeToggle } from './ModeToggle';
 
 function ChatSettings({ isClose }: SettingsProps) {

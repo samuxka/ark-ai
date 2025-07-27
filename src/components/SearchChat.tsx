@@ -22,12 +22,11 @@ function SearchChat({ isClose, ToggleSidebar, onSearchChange }: SearchChatProps)
     },
   };
 
-  // Função para abrir o sidebar e focar o input
   const handleIconClick = () => {
     if (isClose) {
       ToggleSidebar();
       setTimeout(() => {
-        inputRef.current?.focus(); // Agora o TypeScript reconhece o método focus
+        inputRef.current?.focus();
       }, 300);
     }
   };

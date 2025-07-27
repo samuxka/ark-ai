@@ -15,7 +15,6 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { content, role, userId, chatId } = MessageSchema.parse(body);
 
-    // Verificar se o chat pertence ao usuário
     const chat = await prisma.chat.findFirst({
       where: { id: chatId, userId },
     });
@@ -23,7 +22,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Chat não encontrado ou não autorizado' }, { status: 403 });
     }
 
-    // Salvar mensagem do usuário
     const userMessage = await prisma.message.create({
       data: {
         content,
@@ -33,7 +31,6 @@ export async function POST(request: Request) {
       },
     });
 
-    // Se for mensagem do usuário, obter resposta do bot
     let botResponse = '';
     if (role === 'user') {
       botResponse = await sendToAi(content, userId);
