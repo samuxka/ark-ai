@@ -7,10 +7,10 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import SearchChat from "./SearchChat";
 import NewChat from "./NewChat";
-import Settings from "./Settings";
 import { mockChat as initialChats } from "@/db/mock-chat";
 import ChatCard from "./ChatCard";
 import { Label } from "./ui/label";
+import Settings from "./Settings";
 
 function Sidebar() {
   const [isClose, setIsClose] = useState(false);

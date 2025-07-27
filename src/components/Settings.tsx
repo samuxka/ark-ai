@@ -9,7 +9,7 @@ import { Label } from '@radix-ui/react-label';
 import { Input } from './ui/input';
 import { ModeToggle } from './ModeToggle';
 
-function NewChat({ isClose }: SettingsProps) {
+function ChatSettings({ isClose }: SettingsProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const inputVariants = {
@@ -69,4 +69,4 @@ function NewChat({ isClose }: SettingsProps) {
   )
 }
 
-export default NewChat
+export default ChatSettings

@@ -19,6 +19,5 @@ declare module "next-auth" {
     image?: string | null
     username?: string | null
     bio?: string | null
-    banner?: string | null
   }
 }
