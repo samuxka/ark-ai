@@ -55,7 +55,7 @@ export default function LoginPage() {
                         <Button type="submit" className="w-full">Login</Button>
                     </form>
                     <p className="mt-2 flex items-center justify-center gap-1 text-sm">
-                        Don't have an account yet? 
+                        Don&apos;t have an account yet? 
                         <Link href="/signup" className="hover:text-indigo-600 hover:underline">Click here</Link>
                     </p>
                 </CardContent>
