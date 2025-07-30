@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { ChevronRight } from 'lucide-react';
@@ -10,11 +10,9 @@ import { useChatStore } from '@/store/useChatStore';
 interface ChatInputProps {
   onMessageSent?: (content: string) => void;
   chatId: string;
-  setInputRef?: (sendMessage: (content: string) => void) => void;
 }
 
-
-function ChatInput({ onMessageSent, chatId, setInputRef }: ChatInputProps) {
+function ChatInput({ onMessageSent, chatId }: ChatInputProps) {
   const { data: session } = useSession();
   const [input, setInput] = useState('');
   const { addMessage } = useChatStore();
@@ -23,8 +21,9 @@ function ChatInput({ onMessageSent, chatId, setInputRef }: ChatInputProps) {
     e.preventDefault();
     if (!input.trim() || !session?.user?.id) return;
 
-    onMessageSent?.(input);
+    console.log('ChatInput: Enviando mensagem:', input);
 
+    // Adicionar mensagem do usuário ao store
     const userMessage = {
       id: crypto.randomUUID(),
       content: input,
@@ -33,7 +32,11 @@ function ChatInput({ onMessageSent, chatId, setInputRef }: ChatInputProps) {
     };
     addMessage(userMessage);
 
+    // Chamar onMessageSent para gerar título (se for a primeira mensagem)
+    onMessageSent?.(input);
+
     try {
+      // Enviar mensagem pro backend
       const response = await fetch('/api/chats/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -47,14 +50,8 @@ function ChatInput({ onMessageSent, chatId, setInputRef }: ChatInputProps) {
 
       if (!response.ok) throw new Error('Failed to fetch response');
 
-      const { response: botResponse } = await response.json();
-
-      const assistantMessage = {
-        id: crypto.randomUUID(),
-        content: botResponse,
-        role: 'assistant' as const,
-        createdAt: new Date(),
-      };
+      const { assistantMessage } = await response.json();
+      console.log('ChatInput: Resposta do assistente:', assistantMessage);
       addMessage(assistantMessage);
     } catch (error) {
       console.error('Erro ao buscar resposta do assistente:', error);
@@ -68,20 +65,6 @@ function ChatInput({ onMessageSent, chatId, setInputRef }: ChatInputProps) {
 
     setInput('');
   };
-
-  const sendMessageFromCard = (content: string) => {
-    setInput(content);
-    setTimeout(() => {
-      const fakeEvent = { preventDefault: () => {} } as React.FormEvent;
-      handleSubmit(fakeEvent);
-    }, 100);
-  };
-
-  useEffect(() => {
-    if (setInputRef) {
-      setInputRef(sendMessageFromCard);
-    }
-  }, [setInputRef]);
 
   return (
     <div className="w-full h-48 flex items-center justify-center">

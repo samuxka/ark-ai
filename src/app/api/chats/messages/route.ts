@@ -15,13 +15,25 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { content, role, userId, chatId } = MessageSchema.parse(body);
 
+    // Verificar se o chat pertence ao usuário
     const chat = await prisma.chat.findFirst({
       where: { id: chatId, userId },
     });
     if (!chat) {
+      console.error('Chat não encontrado ou não autorizado:', { chatId, userId });
       return NextResponse.json({ error: 'Chat não encontrado ou não autorizado' }, { status: 403 });
     }
 
+    // Verificar se é a primeira mensagem do chat
+    if (!chat.hasFirstMessage && role === 'user') {
+      await prisma.chat.update({
+        where: { id: chatId },
+        data: { hasFirstMessage: true },
+      });
+      console.log('hasFirstMessage atualizado para true no chat:', chatId);
+    }
+
+    // Salvar mensagem do usuário
     const userMessage = await prisma.message.create({
       data: {
         content,
@@ -31,6 +43,7 @@ export async function POST(request: Request) {
       },
     });
 
+    // Se for mensagem do usuário, obter resposta do bot
     let botResponse = '';
     if (role === 'user') {
       botResponse = await sendToAi(content, userId);
@@ -44,9 +57,9 @@ export async function POST(request: Request) {
       });
     }
 
-    return NextResponse.json({ response: botResponse });
+    return NextResponse.json({ message: userMessage, assistantMessage: botResponse });
   } catch (error) {
-    console.error(error);
+    console.error('Erro ao salvar mensagem:', error);
     return NextResponse.json({ error: 'Erro ao salvar mensagem' }, { status: 500 });
   }
 }

@@ -42,7 +42,7 @@ model User {
   password      String
   emailVerified DateTime?
   image         String?
-  username      String?
+  username      String?   @unique
   bio           String?
   accounts      Account[] @relation("AccountToUser")
   sessions      Session[] @relation("SessionToUser")
@@ -51,12 +51,13 @@ model User {
 }
 
 model Chat {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  title     String    @default("New Chat")
-  createdAt DateTime  @default(now())
-  userId    String    @db.ObjectId
-  user      User      @relation(fields: [userId], references: [id], name: "UserToChat")
-  messages  Message[]
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  title           String    @default("New Chat")
+  createdAt       DateTime  @default(now())
+  userId          String    @db.ObjectId
+  user            User      @relation(fields: [userId], references: [id], name: "UserToChat")
+  messages        Message[]
+  hasFirstMessage Boolean   @default(false)
 }
 
 model Message {

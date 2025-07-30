@@ -39,10 +39,11 @@ export default function ChatPage() {
       try {
         const res = await fetch(`/api/chats/${id}?userId=${session?.user.id}`);
         if (!res.ok) throw new Error('Erro ao carregar chat');
-        const { chat, messages } = await res.json();
+        const { chat, messages: chatMessages } = await res.json();
         setChatTitle(chat.title);
+        setShowInputCard(!chat.hasFirstMessage); // Definir com base em hasFirstMessage
         clearMessages();
-        messages.forEach((msg: any) =>
+        chatMessages.forEach((msg: any) =>
           addMessage({
             id: msg.id,
             content: msg.content,
@@ -50,6 +51,7 @@ export default function ChatPage() {
             createdAt: new Date(msg.createdAt),
           })
         );
+        console.log('Chat carregado:', { title: chat.title, hasFirstMessage: chat.hasFirstMessage });
       } catch (error) {
         console.error('Erro ao carregar chat:', error);
         router.push('/');
@@ -59,31 +61,24 @@ export default function ChatPage() {
   }, [id, session?.user?.id, clearMessages, addMessage, router]);
 
   const handleFirstMessage = async (content: string) => {
-    if (!session?.user?.id) return;
+    if (!session?.user?.id || messages.length !== 0) return;
 
-    console.log('handleFirstMessage chamado com content:', content);
-    console.log('messages.length:', messages.length);
-
-    if (messages.length === 0) {
-      try {
-        console.log('Enviando mensagem para gerar título:', content);
-        const res = await fetch(`/api/chats/${id}/title`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ content, userId: session.user.id }),
-        });
-        if (res.ok) {
-          const { title } = await res.json();
-          console.log('Título recebido da API:', title);
-          setChatTitle(title);
-        } else {
-          console.error('Erro na resposta da API:', res.status, await res.text());
-        }
-      } catch (error) {
-        console.error('Erro ao gerar título:', error);
+    try {
+      console.log('Enviando mensagem para gerar título:', content);
+      const res = await fetch(`/api/chats/${id}/title`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content, userId: session.user.id }),
+      });
+      if (res.ok) {
+        const { title } = await res.json();
+        console.log('Título recebido da API:', title);
+        setChatTitle(title);
+      } else {
+        console.error('Erro na resposta da API:', res.status, await res.text());
       }
-      setShowInputCard(false);
-      console.log('setShowInputCard(false) chamado');
+    } catch (error) {
+      console.error('Erro ao gerar título:', error);
     }
   };
 
@@ -116,7 +111,7 @@ export default function ChatPage() {
           {messages.map((msg) => (
             <div key={msg.id} className={`my-4 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
               <div
-                className={`inline-block p-2 rounded ${msg.role === 'user' ? 'bg-blue-600 text-white max-w-[60%]' : ''}`}
+                className={`inline-block p-2 ${msg.role === 'user' ? 'bg-blue-600 text-white max-w-[60%] rounded-t-lg rounded-bl-lg rounded-br' : ''}`}
               >
                 <ReactMarkdown rehypePlugins={[rehypeRaw]}>{msg.content}</ReactMarkdown>
               </div>
@@ -124,14 +119,10 @@ export default function ChatPage() {
           ))}
         </div>
       </ScrollArea>
-      <div className='w-full px-10'>
+      <div className='w-full px-10 bg-transparent'>
         {showInputCard && <InputCard inputs={randomInputs} onCardClick={handleCardClick} />}
       </div>
-      <ChatInput
-        onMessageSent={handleFirstMessage}
-        chatId={id as string}
-        setInputRef={(ref) => (inputRef.current = ref)}
-      />
+      <ChatInput onMessageSent={handleFirstMessage} chatId={id as string} />
     </motion.section>
   );
 }
